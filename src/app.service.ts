@@ -7,6 +7,18 @@ export class AppService {
     return 'Hello World!';
   }
 
+  mostraBanco(): CardDB[]{
+
+    return ALBUM_DATABASE;
+
+  }
+
+  pegaPeloID(id: number): CardDB | undefined {
+
+    return ALBUM_DATABASE.find((c) => c.id === id);;
+
+
+  }
   
 }
 
