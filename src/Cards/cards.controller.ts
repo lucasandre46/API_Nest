@@ -30,16 +30,23 @@ export class CardsController {
   }
 
   @Delete(':id')
-    deletaCard(@Param('id', ParseIntPipe) id : number){
+  deletaCard(@Param('id', ParseIntPipe) id: number) {
     return this.cardsService.deletaCard(id);
-   }
+  }
 
   @Put(':id')
-   atualizaCard(
+  atualizaCard(
     @Body() bodydata: any,
-    @Param( 'id', ParseIntPipe) id : number){
-      return this.cardsService.atualizaCard(id, bodydata);
-    }
+    @Param('id', ParseIntPipe) id: number) {
+    return this.cardsService.atualizaCard(id, bodydata);
+  }
+
+  @Put('compra/:id')
+  compraDisco(
+    @Body() quantia: number,
+    @Param('id', ParseIntPipe) id: number) {
+    return this.cardsService.compraDisco(id, quantia)
+  }
 
 }
 

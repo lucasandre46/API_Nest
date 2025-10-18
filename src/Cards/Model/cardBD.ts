@@ -2,6 +2,7 @@ import {Card} from './card';
 
 export interface CardDB extends Card {
   id: number;
+  quant: number;
 }
 
 export const ALBUM_DATABASE: CardDB[] = [
@@ -15,6 +16,7 @@ export const ALBUM_DATABASE: CardDB[] = [
     imageUrl:
       'https://images.coveralia.com/audio/o/Os_Paralamas_Do_Sucesso-Cinema_Mudo-Frontal.jpg',
     buttonText: 'Músicas',
+    quant: 1,
   },
   {
     id: 2,
@@ -26,6 +28,7 @@ export const ALBUM_DATABASE: CardDB[] = [
     imageUrl:
       'https://tse4.mm.bing.net/th/id/OIP.-u70aF7GGeHyKuNn7tkfHgHaEK?rs=1&pid=ImgDetMain&o=7&rm=3',
     buttonText: 'Músicas',
+    quant: 4,
   },
   {
     id: 3,
@@ -37,6 +40,7 @@ export const ALBUM_DATABASE: CardDB[] = [
     imageUrl:
       'https://miro.medium.com/v2/resize:fit:1000/1*HQIW1LcGIF4iDjOzFY40Cw.jpeg',
     buttonText: 'Músicas',
+    quant: 3,
   },
   {
     id: 4,
@@ -48,6 +52,7 @@ export const ALBUM_DATABASE: CardDB[] = [
     imageUrl:
       'https://tse3.mm.bing.net/th/id/OIP.lpp_ZNvTbiynwbeBZazU0wHaHa?rs=1&pid=ImgDetMain&o=7&rm=3',
     buttonText: 'Músicas',
+    quant: 6,
   },
   {
     id: 5,
@@ -59,6 +64,7 @@ export const ALBUM_DATABASE: CardDB[] = [
     imageUrl:
       'https://th.bing.com/th/id/R.4eb7ac6538c9df4f778f0361c4222c70?rik=ymz185ZMBxdrsg&pid=ImgRaw&r=0',
     buttonText: 'Músicas',
+    quant: 1,
   },
   {
     id: 6,
@@ -70,6 +76,7 @@ export const ALBUM_DATABASE: CardDB[] = [
     imageUrl:
       'https://images-na.ssl-images-amazon.com/images/I/71p0e8px-+L._AC_SL1200_.jpg',
     buttonText: 'Músicas',
+    quant: 5,
   },
   {
     id: 7,
@@ -81,6 +88,7 @@ export const ALBUM_DATABASE: CardDB[] = [
     imageUrl:
       'https://th.bing.com/th/id/R.1983e807694afc3f151db0f1e57b78f9?rik=AA3UiOupL%2foVAg&riu=http%3a%2f%2fpm1.aminoapps.com%2f7191%2f4c0f59d4cbf7ce99325fadf44b417a164aa064f3r1-400-400v2_uhq.jpg&ehk=ML2tsvAeOzjOIOInFwvk5RvlWaaOxM%2bdUQj2GqOuYzg%3d&risl=&pid=ImgRaw&r=0',
     buttonText: 'Músicas',
+    quant: 2,
   },
   {
     id: 8,
@@ -92,5 +100,6 @@ export const ALBUM_DATABASE: CardDB[] = [
     imageUrl:
       'https://tse2.mm.bing.net/th/id/OIP.vdpDZgYW-9QafxPjJsTm_wHaHa?rs=1&pid=ImgDetMain&o=7&rm=3',
     buttonText: 'Músicas',
+    quant: 4,
   },
 ];

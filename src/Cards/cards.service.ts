@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ALBUM_DATABASE, CardDB, } from './Model/cardBD';
 import { findIndex } from 'rxjs';
+import { error } from 'console';
 
 
 
@@ -47,6 +48,17 @@ export class CardsService {
       ALBUM_DATABASE[index] = { ...ALBUM_DATABASE[index], ...bodydata};
 
       return ALBUM_DATABASE[index];
+  }
+
+  compraDisco(id: number, quantia: any){
+    const index = ALBUM_DATABASE.findIndex((c) => c.id === id);   
+
+    if(ALBUM_DATABASE[index].quant < quantia){
+      return 'Erro, quantidade em estoque insuficiente!'
+    } else{
+      ALBUM_DATABASE[index].quant -= quantia;
+      return 'tudo certo'
+    } 
   }
   
 }
