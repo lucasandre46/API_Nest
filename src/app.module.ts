@@ -4,9 +4,10 @@ import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CardsModule } from './Cards/cards.module';
+import { MusicModule } from './music/music.module';
 
 @Module({
-  imports: [CardsModule],
+  imports: [CardsModule, MusicModule],
   controllers: [AppController],
   providers: [AppService],
 })
