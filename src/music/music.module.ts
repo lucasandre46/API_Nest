@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
 import { MusicController } from './music.controller';
-import { Music } from './music';
 import { MusicService } from './music.service';
 
 @Module({
   controllers: [MusicController],
-  providers: [Music, MusicService]
+  providers: [MusicService]
 })
 export class MusicModule {}
