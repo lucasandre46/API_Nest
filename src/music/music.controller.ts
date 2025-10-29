@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Delete, Put, Body, Param, ParseIntPipe, Header, StreamableFile, NotFoundException } from '@nestjs/common';
 import { MusicService } from './music.service';
+import { CreateMusicDto } from './DTO/create_music_dto';
 
 @Controller('music')
 export class MusicController {
@@ -43,7 +44,7 @@ export class MusicController {
     }
 
     @Post()
-    createMusic(@Body() bodyData: any) {
+    createMusic(@Body() bodyData: CreateMusicDto) {
         return this.musicService.createMusic(bodyData)
     }
 
@@ -54,7 +55,7 @@ export class MusicController {
 
     @Put(':id')
     atualizaMusic(
-        @Body() bodydata: any,
+        @Body() bodydata: CreateMusicDto,
         @Param('id', ParseIntPipe) id: number) {
         return this.musicService.atualizaMusic(id, bodydata);
     }
