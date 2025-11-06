@@ -1,14 +1,19 @@
-import { Controller, Param, Get, NotFoundException } from '@nestjs/common';
+import { Controller, Param, Get, NotFoundException, Post, Body  } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { RegisterDTO } from './UserDTO/registerDTO';
 
 
 
-@Controller()
+@Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
   
-  @Get()
-  loginUser() {}
+  @Post('register')
+  async register(@Body() registerDTO: RegisterDTO) {
+
+     return this.authService.register(registerDTO);
+
+  }
 
 
    }
