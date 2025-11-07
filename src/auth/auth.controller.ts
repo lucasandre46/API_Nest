@@ -1,6 +1,7 @@
 import { Controller, Param, Get, NotFoundException, Post, Body  } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDTO } from './UserDTO/registerDTO';
+import { UserDTO } from './UserDTO/userDTO';
 
 
 
@@ -13,6 +14,13 @@ export class AuthController {
 
      return this.authService.register(registerDTO);
 
+  }
+
+  @Post('login')
+  async login(@Body() loginDTO: UserDTO){
+
+   return this.authService.login(loginDTO)
+   
   }
 
 

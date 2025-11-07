@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { RegisterDTO } from './UserDTO/registerDTO';
 import { UserBD, userBD } from './Model/userBD';
 import { ConflictException } from '@nestjs/common';
 import { User } from './Model/user';
 import * as bcrypt from 'bcryptjs';
+import { UserDTO } from './UserDTO/userDTO';
 
 
 @Injectable()
@@ -46,5 +47,28 @@ export class AuthService {
     }
 
 
+    async login(loginDTO: UserDTO): Promise<Omit<User, 'senha'>>{
+
+       const existingUser = userBD.find((user) => user.email === loginDTO.email,);
+
+       if(!existingUser){
+        throw new UnauthorizedException('Email invalido')
+       }
+
+       const SenhaValidator = await bcrypt.compare(
+
+         loginDTO.senha,
+         existingUser.senha,
+
+       );
+
+       if(!SenhaValidator){
+        throw new UnauthorizedException('Senha incorreta')
+       }
+
+       const { senha, ...result } = existingUser
+       return result;
+
+    }
   
 }
