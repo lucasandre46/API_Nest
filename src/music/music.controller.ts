@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Delete, Put, Body, Param, ParseIntPipe, Header, StreamableFile, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Put, Body, Param, ParseIntPipe, Header, StreamableFile, NotFoundException, UseGuards } from '@nestjs/common';
 import { MusicService } from './music.service';
 import { CreateMusicDto } from './DTO/create_music_dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwtAuth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('music')
 export class MusicController {
     constructor(private readonly musicService: MusicService) { }

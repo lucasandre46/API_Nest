@@ -5,6 +5,7 @@ import { ConflictException } from '@nestjs/common';
 import { User } from './Model/user';
 import * as bcrypt from 'bcryptjs';
 import { UserDTO } from './UserDTO/userDTO';
+import { JwtService } from '@nestjs/jwt';
 
 
 @Injectable()
@@ -12,7 +13,9 @@ export class AuthService {
 
     private static idConter = 1;
 
-    async register(registerDto: RegisterDTO): Promise<Omit<User, 'senha' | 'CPF' | 'CEP'>>{
+    constructor(private readonly jwtService: JwtService) {}
+
+    async register(registerDto: RegisterDTO): Promise<{ access_token: string }>{
         const existUser = userBD.find(
             (user) => user.email === registerDto.email,
         );
@@ -42,32 +45,38 @@ export class AuthService {
 
         userBD.push(newUser);
 
-        const{ senha, CPF, CEP, ...result} = newUser
-        return result;
+        return this.geraToken(newUser)
     }
 
 
-    async login(loginDTO: UserDTO): Promise<Omit<User, 'senha'>>{
+    async login(loginDTO: UserDTO): Promise<{ access_token: string }> {
+  const existingUser = userBD.find((user) => user.email === loginDTO.email);
 
-       const existingUser = userBD.find((user) => user.email === loginDTO.email,);
+  if (!existingUser) {
+    throw new UnauthorizedException('Email inválido');
+  }
 
-       if(!existingUser){
-        throw new UnauthorizedException('Email invalido')
-       }
+  const senhaCorreta = await bcrypt.compare(loginDTO.senha, existingUser.senha);
 
-       const SenhaValidator = await bcrypt.compare(
+  if (!senhaCorreta) {
+    throw new UnauthorizedException('Senha incorreta');
+  }
 
-         loginDTO.senha,
-         existingUser.senha,
+  return this.geraToken(existingUser);
+}
 
-       );
+    private async geraToken(user: User): Promise<{ access_token: string}> {
+        const payload = {
+            sub: user.id,
+            email: user.email,
+            nome: user.nome,
+        }
 
-       if(!SenhaValidator){
-        throw new UnauthorizedException('Senha incorreta')
-       }
+        const accessToken = await this.jwtService.signAsync(payload);
 
-       const { senha, ...result } = existingUser
-       return result;
+        return {
+            access_token: accessToken,
+        }
 
     }
   

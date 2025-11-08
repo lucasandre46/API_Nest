@@ -1,8 +1,9 @@
-import { Controller, Param, Get, NotFoundException, Post, Body, Delete, ParseIntPipe, Put } from '@nestjs/common';
+import { Controller, Param, Get, NotFoundException, Post, Body, Delete, ParseIntPipe, Put, UseGuards } from '@nestjs/common';
 import { CardsService } from './cards.service';
+import { JwtAuthGuard } from 'src/auth/guards/jwtAuth.guard';
 
 
-
+@UseGuards(JwtAuthGuard)
 @Controller('cards')
 export class CardsController {
   constructor(private readonly cardsService: CardsService) { }
