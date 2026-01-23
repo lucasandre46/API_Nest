@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { MusicController } from './music.controller';
 import { MusicService } from './music.service';
+import { PrismaService } from 'src/prisma.service';
 
 @Module({
   controllers: [MusicController],
-  providers: [MusicService]
+  providers: [MusicService, PrismaService]
 })
 export class MusicModule {}
