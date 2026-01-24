@@ -1,7 +1,7 @@
 import { Controller, Param, Get, NotFoundException, Post, Body, Delete, ParseIntPipe, Put, UseGuards } from '@nestjs/common';
 import { CardsService } from './cards.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwtAuth.guard';
-
+import { CreateCardDto } from './DTO/create_cards_dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('cards')
@@ -15,19 +15,28 @@ export class CardsController {
 
   @Get('banda/:name')
   getByBandName(@Param('name') name: string) {
-
     const cards = this.cardsService.pegaPeloNome(name);
 
-    if (!cards || cards.length === 0) {
-      throw new NotFoundException(`Nenhum cartão encontrado para a banda ${name}`);
+    if (!cards) {
+      throw new NotFoundException(
+        `Nenhum cartão encontrado para a banda ${name}`,
+      );
     }
 
     return cards;
   }
 
   @Post()
-  createCard(@Body() bodyData: any) {
-    return this.cardsService.createCard(bodyData)
+  createCard(@Body() createCardDto: CreateCardDto) {
+    return this.cardsService.createCard(createCardDto);
+  }
+
+  @Put(':id')
+  atualizaCard(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() createCardDto: CreateCardDto,
+  ) {
+    return this.cardsService.atualizaCard(id, createCardDto);
   }
 
   @Delete(':id')
@@ -35,23 +44,15 @@ export class CardsController {
     return this.cardsService.deletaCard(id);
   }
 
-  @Put(':id')
-  atualizaCard(
-    @Body() bodydata: any,
-    @Param('id', ParseIntPipe) id: number) {
-    return this.cardsService.atualizaCard(id, bodydata);
-  }
-
   @Put('compra/:id')
   compraDisco(
-    @Body() quantia: number,
-    @Param('id', ParseIntPipe) id: number) {
-    return this.cardsService.compraDisco(id, quantia)
+    @Param('id', ParseIntPipe) id: number,
+    @Body('quantia', ParseIntPipe) quantia: number,
+  ) {
+    return this.cardsService.compraDisco(id, quantia);
   }
 
 }
-
-
 
 // arrumaOrdem(): CardDB[] {
 //   return this.cardsService.arrumaOrdem();

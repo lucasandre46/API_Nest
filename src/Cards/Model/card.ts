@@ -5,4 +5,5 @@ export interface Card {
   description: string;
   imageUrl: string;
   buttonText: string;
+  quantidade: number;
 }

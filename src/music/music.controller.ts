@@ -10,8 +10,8 @@ export class MusicController {
 
 
     @Get()
-    pegaBanco() {
-        return this.musicService.pegaBD();
+    findAll() {
+        return this.musicService.findAll();
     }
 
     @Get('audio/:id')
@@ -20,7 +20,7 @@ export class MusicController {
     async proxyAudio(@Param('id', ParseIntPipe) id: number): Promise<StreamableFile> {
         try {
             // Obtém o ID do arquivo do serviço
-            const idAudio = this.musicService.pegaMusica(id);
+            const idAudio = this.musicService.findOne(id);
             if (!idAudio) {
                 throw new NotFoundException('Áudio não encontrado no serviço');
             }
@@ -41,25 +41,25 @@ export class MusicController {
     }
 
     @Get(':id')
-    pegaMusica(@Param('id', ParseIntPipe) id: number) {
-        return this.musicService.pegaMusica(id)
+    findOne(@Param('id', ParseIntPipe) id: number) {
+        return this.musicService.findOne(id);
     }
 
     @Post()
-    createMusic(@Body() bodyData: CreateMusicDto) {
-        return this.musicService.createMusic(bodyData)
+    create(@Body() createMusicDto: CreateMusicDto) {
+        return this.musicService.create(createMusicDto);
     }
 
     @Delete(':id')
-    deletaMusic(@Param('id', ParseIntPipe) id: number) {
-        return this.musicService.deletaMusic(id);
+    remove(@Param('id', ParseIntPipe) id: number) {
+        return this.musicService.remove(id);
     }
 
     @Put(':id')
-    atualizaMusic(
+    update(
         @Body() bodydata: CreateMusicDto,
         @Param('id', ParseIntPipe) id: number) {
-        return this.musicService.atualizaMusic(id, bodydata);
+        return this.musicService.update(id, bodydata);
     }
 
 

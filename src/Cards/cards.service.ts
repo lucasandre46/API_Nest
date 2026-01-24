@@ -1,102 +1,83 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { ALBUM_DATABASE, CardDB, } from './Model/cardBD';
-import { findIndex } from 'rxjs';
-import { error } from 'console';
-
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { PrismaService } from 'src/prisma.service';
+import { Card } from './Model/card';
+import { CreateCardDto } from './DTO/create_cards_dto';
 
 
 @Injectable()
 export class CardsService {
-  getHello(): string {
-    return 'Hello World!';
+  constructor(private prisma: PrismaService) {}
+
+  async mostraBanco(): Promise<Card[]> {
+    return this.prisma.card.findMany();
   }
 
-  mostraBanco(): CardDB[]{
-
-    return ALBUM_DATABASE;
-
+  async pegaPeloNome(artist: string): Promise<Card[]> {
+    return this.prisma.card.findMany({
+      where: {
+        artist: {
+          equals: artist,
+          mode: 'insensitive',
+        },
+      },
+    });
   }
 
-  pegaPeloNome(name: string): CardDB[] {
-
-    return ALBUM_DATABASE.filter(
-      (c) => c.bandName.toLowerCase() === name.toLowerCase()
-    );
-
-
+  async createCard( createCardDto: CreateCardDto): Promise<Card> {
+    return this.prisma.card.create({
+      createCardDto,
+    });
   }
 
-  createCard(dataCard : any){
-  const newCard = { id: Date.now(), ...dataCard };
-  ALBUM_DATABASE.push(newCard);
-  return newCard;
+  async findOne(id: number): Promise<Card> {
+    const card = await this.prisma.card.findUnique({
+      where: { id: BigInt(id) },
+    });
+
+    if (!card) {
+      throw new NotFoundException(`Card com id ${id} não encontrado`);
+    }
+
+    return card;
   }
 
-  deletaCard(id: number){
-    
-    const index = ALBUM_DATABASE.findIndex((c) => c.id === id);
+  async atualizaCard(id: number, createCardDto: CreateCardDto): Promise<Card> {
+    await this.findOne(id);
 
-    const deleted = ALBUM_DATABASE.splice(index, 1);
-
-    return deleted[0]
+    return this.prisma.card.update({
+      where: { id: BigInt(id) },
+      createCardDto,
+    });
   }
 
-  atualizaCard(id : number, bodydata : any){
-    
-      const index = ALBUM_DATABASE.findIndex((c) => c.id === id);
+  async deletaCard(id: number): Promise<Card> {
+    await this.findOne(id);
 
-      ALBUM_DATABASE[index] = { ...ALBUM_DATABASE[index], ...bodydata};
-
-      return ALBUM_DATABASE[index];
+    return this.prisma.card.delete({
+      where: { id: BigInt(id) },
+    });
   }
 
-  compraDisco(id: number, quantia: any){
-    const index = ALBUM_DATABASE.findIndex((c) => c.id === id);   
+  async compraDisco(id: number, quantia: number): Promise<string> {
+    const card = await this.findOne(id);
 
-    if(ALBUM_DATABASE[index].quant < quantia){
-      return 'Erro, quantidade em estoque insuficiente!'
-    } else{
-      ALBUM_DATABASE[index].quant -= quantia;
-      return 'tudo certo'
-    } 
+    if (!card.quantidade || card.quantidade < quantia) {
+      throw new BadRequestException(
+        'Erro, quantidade em estoque insuficiente!',
+      );
+    }
+
+    await this.prisma.card.update({
+      where: { id: BigInt(id) },
+      data: {
+        quantidade: card.quantidade - quantia,
+      },
+    });
+
+    return 'Compra realizada com sucesso';
   }
-  
 }
-
-//  arrumaOrdem(): CardDB[] {
-
-//   for(let i = 0; i < ALBUM_DATABASE.length -1 ; i++){
-//     if(ALBUM_DATABASE[i].year > ALBUM_DATABASE[i + 1].year){
-
-//       let aux = ALBUM_DATABASE[i + 1];
-
-//       ALBUM_DATABASE[i + 1] = ALBUM_DATABASE[i];
-
-//       ALBUM_DATABASE[i] = aux;
-
-//     } 
-//   }
-
-//   let card = ALBUM_DATABASE
-
-//   return card
-
-
-//  }
-
-
-// mudaBD(id: number, descricao: string, nomebanda: string, years: number): CardDB {
-  //     const card = ALBUM_DATABASE[id - 1];
-  //     card.description = descricao;
-  //     card.bandName = nomebanda;
-//     card.year = years;
-//     return card;
-//   }
-  
-  
-  // filtraBD(id: number): CardDB {
-  //   return ALBUM_DATABASE[id];
-
-
-    // MostraBanco(): CardDB[] {
-    // return ALBUM_DATABASE;
