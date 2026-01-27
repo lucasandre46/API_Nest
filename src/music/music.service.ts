@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { MusicBD, Music_Data } from './Model/musicBD';
-import { Music } from './Model/music';
+import { music } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import { CreateMusicDto } from './DTO/create_music_dto';
 
@@ -10,17 +10,19 @@ export class MusicService {
 
   constructor( private prisma: PrismaService ) { }
 
-  async create(createMusicDto: CreateMusicDto): Promise<Music> {
-    return this.prisma.music.create({
-      data: createMusicDto
-    })
+  async create(createMusicDto: CreateMusicDto): Promise<music> {
+    return this.prisma.$transaction(async (tx) => {
+      return tx.music.create({
+        data: createMusicDto,
+      });
+    });
   }
 
-  async findAll(): Promise<Music[]> {
+  async findAll(): Promise<music[]> {
     return this.prisma.music.findMany();
   }
 
-  async findOne(id: number): Promise<Music> {
+  async findOne(id: number): Promise<music> {
 
     const music = await this.prisma.music.findUnique({
       
@@ -35,13 +37,18 @@ export class MusicService {
     return music;
   }
 
-  async update(id: number, createMusicDto: CreateMusicDto): Promise<Music> {
+  async update(id: number, createMusicDto: CreateMusicDto): Promise<music> {
+    return this.prisma.$transaction(async (tx) => {
+      const music = await tx.music.findUnique({ where: { id } });
 
-    await this.findOne(id);
-
-    return this.prisma.music.update({
-      where: { id },
-      data: createMusicDto,
+      if (!music) {
+        throw new NotFoundException(`Musica com o ID #${id} não encontrado`);
+      }
+    
+      return tx.music.update({
+        where: { id },
+        data: createMusicDto,
+      });
     });
 
   }
