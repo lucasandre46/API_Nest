@@ -1,9 +1,9 @@
 export interface Card {
-  bandName: string;
-  album: string;
-  year: number;
-  description: string;
-  imageUrl: string;
-  buttonText: string;
-  quantidade: number;
+  id: string;         
+  description?: string;
+  artist?: string;
+  img?: string;
+  valor?: number;
+  quantidade?: number;
+  data?: string;
 }

@@ -15,29 +15,29 @@ datasource db {
 }
 
 model users {
-  id        BigInt   @id @default(autoincrement())
+  id        Int   @id @default(autoincrement())
   name      String?   @db.VarChar
   email     String?   @unique @db.VarChar
   senha     String?   @db.VarChar
   cpf       String?   @db.VarChar
   cep       String?   @db.VarChar
-  id_music  BigInt[] @db.BigInt
+  id_music  Int[] @db.Int
 
   @@map("users")
 }
 
 model music {
-  id          BigInt @id @default(autoincrement())
+  id          Int @id @default(autoincrement())
   time        String? @db.VarChar
   description String? @db.Text
-  album       BigInt? @db.BigInt
+  album       Int? @db.Int
   audio       String? @db.Text
 
   @@map("music")
 }
 
 model card {
-  id          BigInt  @id @default(autoincrement())
+  id          Int  @id @default(autoincrement())
   description String?  @db.Text
   artist      String?  @db.VarChar
   img         String?  @db.Text

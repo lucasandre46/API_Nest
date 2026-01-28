@@ -1,4 +1,15 @@
-import { Controller, Param, Get, NotFoundException, Post, Body, Delete, ParseIntPipe, Put, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Param,
+  Get,
+  NotFoundException,
+  Post,
+  Body,
+  Delete,
+  ParseIntPipe,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { CardsService } from './cards.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwtAuth.guard';
 import { CreateCardDto } from './DTO/create_cards_dto';
@@ -6,7 +17,7 @@ import { CreateCardDto } from './DTO/create_cards_dto';
 @UseGuards(JwtAuthGuard)
 @Controller('cards')
 export class CardsController {
-  constructor(private readonly cardsService: CardsService) { }
+  constructor(private readonly cardsService: CardsService) {}
 
   @Get()
   mostraBanco() {
@@ -14,10 +25,10 @@ export class CardsController {
   }
 
   @Get('banda/:name')
-  getByBandName(@Param('name') name: string) {
-    const cards = this.cardsService.pegaPeloNome(name);
+  async getByBandName(@Param('name') name: string) {
+    const cards = await this.cardsService.pegaPeloNome(name);
 
-    if (!cards) {
+    if (!cards || cards.length === 0) {
       throw new NotFoundException(
         `Nenhum cartão encontrado para a banda ${name}`,
       );
@@ -51,12 +62,4 @@ export class CardsController {
   ) {
     return this.cardsService.compraDisco(id, quantia);
   }
-
 }
-
-// arrumaOrdem(): CardDB[] {
-//   return this.cardsService.arrumaOrdem();
-
-//  @Get()
-//   mudaBD(): CardDB | undefined {
-//     return this.cardsService.mudaBD(1, 'Nova descrição', 'Nova Banda', 2025);

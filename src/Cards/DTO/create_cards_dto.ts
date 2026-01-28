@@ -8,25 +8,25 @@ import {
 export class CreateCardDto {
   @IsOptional()
   @IsString()
-  description: string;
+  description?: string;
 
   @IsOptional()
   @IsString()
-  artist: string;
+  artist?: string;
 
   @IsOptional()
   @IsUrl()
-  img: string;
+  img?: string;
 
   @IsOptional()
   @IsNumber()
-  valor: number;
+  valor?: number;
 
   @IsOptional()
   @IsNumber()
-  quantidade: number;
+  quantidade?: number;
 
   @IsOptional()
   @IsString()
-  data: string;
+  data?: string;
 }
