@@ -9,7 +9,7 @@ import { card } from '@prisma/client';
 
 @Injectable()
 export class CardsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   private serialize(card: card) {
     return {
@@ -51,7 +51,7 @@ export class CardsService {
 
   async findOne(id: number) {
     const card = await this.prisma.card.findUnique({
-      where: { id: BigInt(id) },
+      where: { id: id },
     });
 
     if (!card) {
@@ -65,7 +65,7 @@ export class CardsService {
   async atualizaCard(id: number, createCardDto: CreateCardDto) {
     const card = await this.prisma.$transaction(async (tx) => {
       const existing = await tx.card.findUnique({
-        where: { id: BigInt(id) },
+        where: { id: id },
       });
 
       if (!existing) {
@@ -73,7 +73,7 @@ export class CardsService {
       }
 
       return tx.card.update({
-        where: { id: BigInt(id) },
+        where: { id: id },
         data: createCardDto,
       });
     });
@@ -83,7 +83,7 @@ export class CardsService {
 
   async deletaCard(id: number) {
     const card = await this.prisma.card.delete({
-      where: { id: BigInt(id) },
+      where: { id: id },
     });
 
     return this.serialize(card);
@@ -93,7 +93,7 @@ export class CardsService {
   async compraDisco(id: number, quantia: number) {
     const card = await this.prisma.$transaction(async (tx) => {
       const existing = await tx.card.findUnique({
-        where: { id: BigInt(id) },
+        where: { id: id },
       });
 
       if (!existing) {
@@ -107,7 +107,7 @@ export class CardsService {
       }
 
       return tx.card.update({
-        where: { id: BigInt(id) },
+        where: { id: id },
         data: {
           quantidade: existing.quantidade - quantia,
         },

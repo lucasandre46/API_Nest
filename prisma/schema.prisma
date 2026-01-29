@@ -11,7 +11,6 @@ generator client {
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
 }
 
 model users {
@@ -21,7 +20,7 @@ model users {
   senha     String?   @db.VarChar
   cpf       String?   @db.VarChar
   cep       String?   @db.VarChar
-  id_music  Int[] @db.Int
+  id_music  Int
 
   @@map("users")
 }
@@ -30,7 +29,7 @@ model music {
   id          Int @id @default(autoincrement())
   time        String? @db.VarChar
   description String? @db.Text
-  album       Int? @db.Int
+  album       Int?
   audio       String? @db.Text
 
   @@map("music")
