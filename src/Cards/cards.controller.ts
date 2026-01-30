@@ -11,7 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CardsService } from './cards.service';
-import { JwtAuthGuard } from 'src/auth/guards/jwtAuth.guard';
+import { JwtAuthGuard } from '../auth/guards/jwtAuth.guard';
 import { CreateCardDto } from './DTO/create_cards_dto';
 
 @UseGuards(JwtAuthGuard)

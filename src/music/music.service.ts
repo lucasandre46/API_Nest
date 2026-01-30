@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { MusicBD, Music_Data } from './Model/musicBD';
 import { music } from '@prisma/client';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from '../prisma.service';
 import { CreateMusicDto } from './DTO/create_music_dto';
 
 
