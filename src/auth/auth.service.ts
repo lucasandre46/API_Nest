@@ -1,21 +1,19 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
 import { RegisterDTO } from './UserDTO/registerDTO';
 import { UserBD, userBD } from './Model/userBD';
-import { ConflictException } from '@nestjs/common';
 import { User } from './Model/user';
 import * as bcrypt from 'bcryptjs';
 import { UserDTO } from './UserDTO/userDTO';
 import { JwtService } from '@nestjs/jwt';
-
 
 @Injectable()
 export class AuthService {
 
     private static idConter = 1;
 
-    constructor(private readonly jwtService: JwtService) {}
+    constructor(private readonly jwtService: JwtService) { }
 
-    async register(registerDto: RegisterDTO): Promise<{ access_token: string }>{
+    async register(registerDto: RegisterDTO): Promise<{ access_token: string }> {
         const existUser = userBD.find(
             (user) => user.email === registerDto.email,
         );
@@ -40,7 +38,6 @@ export class AuthService {
             telefone: registerDto.telefone,
             gostoMusical: registerDto.gostoMusical,
             artistaFavorito: registerDto.artistaFavorito
-        
         };
 
         userBD.push(newUser);
@@ -50,22 +47,22 @@ export class AuthService {
 
 
     async login(loginDTO: UserDTO): Promise<{ access_token: string }> {
-  const existingUser = userBD.find((user) => user.email === loginDTO.email);
+        const existingUser = userBD.find((user) => user.email === loginDTO.email);
 
-  if (!existingUser) {
-    throw new UnauthorizedException('Email inválido');
-  }
+        if (!existingUser) {
+            throw new UnauthorizedException('Email inválido');
+        }
 
-  const senhaCorreta = await bcrypt.compare(loginDTO.senha, existingUser.senha);
+        const senhaCorreta = await bcrypt.compare(loginDTO.senha, existingUser.senha);
 
-  if (!senhaCorreta) {
-    throw new UnauthorizedException('Senha incorreta');
-  }
+        if (!senhaCorreta) {
+            throw new UnauthorizedException('Senha incorreta');
+        }
 
-  return this.geraToken(existingUser);
-}
+        return this.geraToken(existingUser);
+    }
 
-    private async geraToken(user: User): Promise<{ access_token: string}> {
+    private async geraToken(user: User): Promise<{ access_token: string }> {
         const payload = {
             sub: user.id,
             email: user.email,
@@ -77,7 +74,5 @@ export class AuthService {
         return {
             access_token: accessToken,
         }
-
     }
-  
 }

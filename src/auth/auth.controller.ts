@@ -1,4 +1,4 @@
-import { Controller, Param, Get, NotFoundException, Post, Body, Res  } from '@nestjs/common';
+import { Controller, Param, Get, NotFoundException, Post, Body, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDTO } from './UserDTO/registerDTO';
 import { UserDTO } from './UserDTO/userDTO';
@@ -9,33 +9,32 @@ import type { Response } from 'express'
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
-  
+  constructor(private readonly authService: AuthService) { }
+
   @Post('register')
   async register(
-   @Res({ passthrough: true }) res: Response,
-   @Body() registerDTO: RegisterDTO) {
+    @Res({ passthrough: true }) res: Response,
+    @Body() registerDTO: RegisterDTO) {
 
-     const { access_token } = await this.authService.register(registerDTO);
+    const { access_token } = await this.authService.register(registerDTO);
 
-     res.cookie('access_token', access_token, {
+    res.cookie('access_token', access_token, {
       httpOnly: true,
-      secure: true ,
+      secure: true,
       sameSite: 'strict',
       maxAge: 1000 * 60 * 60 * 1,
-     })
+    })
 
-     return this.authService.register(registerDTO);
+    return { message: 'Cadastro realizado com sucesso', access_token };
 
   }
 
   @Post('login')
-  async login(@Body() loginDTO: UserDTO){
+  async login(@Body() loginDTO: UserDTO) {
 
-   return this.authService.login(loginDTO)
-   
+    return this.authService.login(loginDTO)
+
   }
 
 
-   }
-  
+}

@@ -17,7 +17,7 @@ import { CreateCardDto } from './DTO/create_cards_dto';
 @UseGuards(JwtAuthGuard)
 @Controller('cards')
 export class CardsController {
-  constructor(private readonly cardsService: CardsService) {}
+  constructor(private readonly cardsService: CardsService) { }
 
   @Get()
   mostraBanco() {
@@ -28,7 +28,7 @@ export class CardsController {
   async getByBandName(@Param('name') name: string) {
     const cards = await this.cardsService.pegaPeloNome(name);
 
-    if (!cards || cards.length === 0) {
+    if (cards.length === 0) {
       throw new NotFoundException(
         `Nenhum cartão encontrado para a banda ${name}`,
       );

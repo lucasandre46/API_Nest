@@ -3,7 +3,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CardsModule } from './Cards/cards.module';
+import { CardsModule } from './cards/cards.module';
 import { MusicModule } from './music/music.module';
 import { AuthModule } from './auth/auth.module';
 import { PrismaService } from './prisma.service';
@@ -13,4 +13,4 @@ import { PrismaService } from './prisma.service';
   controllers: [AppController],
   providers: [AppService, PrismaService],
 })
-export class AppModule {}
+export class AppModule { }

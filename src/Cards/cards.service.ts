@@ -39,79 +39,67 @@ export class CardsService {
 
 
   async createCard(createCardDto: CreateCardDto) {
-    const card = await this.prisma.$transaction(async (tx) => {
-      return tx.card.create({
-        data: createCardDto,
-      });
+    const card = await this.prisma.card.create({
+      data: createCardDto,
     });
 
     return this.serialize(card);
   }
 
 
-  async findOne(id: number) {
-    const card = await this.prisma.card.findUnique({
-      where: { id: id },
-    });
 
-    if (!card) {
-      throw new NotFoundException(`Card com id ${id} não encontrado`);
-    }
-
-    return this.serialize(card);
-  }
 
 
   async atualizaCard(id: number, createCardDto: CreateCardDto) {
-    const card = await this.prisma.$transaction(async (tx) => {
-      const existing = await tx.card.findUnique({
-        where: { id: id },
-      });
-
-      if (!existing) {
-        throw new NotFoundException(`Card com o ID #${id} não encontrado`);
-      }
-
-      return tx.card.update({
+    try {
+      const card = await this.prisma.card.update({
         where: { id: id },
         data: createCardDto,
       });
-    });
-
-    return this.serialize(card);
+      return this.serialize(card);
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException(`Card com o ID #${id} não encontrado`);
+      }
+      throw error;
+    }
   }
 
   async deletaCard(id: number) {
-    const card = await this.prisma.card.delete({
-      where: { id: id },
-    });
-
-    return this.serialize(card);
+    try {
+      const card = await this.prisma.card.delete({
+        where: { id: id },
+      });
+      return this.serialize(card);
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException(`Card com o ID #${id} não encontrado`);
+      }
+      throw error;
+    }
   }
 
 
   async compraDisco(id: number, quantia: number) {
-    const card = await this.prisma.$transaction(async (tx) => {
-      const existing = await tx.card.findUnique({
-        where: { id: id },
-      });
+    const existing = await this.prisma.card.findUnique({
+      where: { id: id },
+    });
 
-      if (!existing) {
-        throw new NotFoundException(`Card com id ${id} não encontrado`);
-      }
+    if (!existing) {
+      throw new NotFoundException(`Card com id ${id} não encontrado`);
+    }
 
-      if (!existing.quantidade || existing.quantidade < quantia) {
-        throw new BadRequestException(
-          'Erro, quantidade em estoque insuficiente!',
-        );
-      }
+    if (!existing.quantidade || existing.quantidade < quantia) {
+      throw new BadRequestException(
+        'Erro, quantidade em estoque insuficiente!',
+      );
+    }
 
-      return tx.card.update({
-        where: { id: id },
-        data: {
-          quantidade: existing.quantidade - quantia,
-        },
-      });
+    const card = await this.prisma.card.update({
+      where: { id: id },
+      data: {
+        quantidade: existing.quantidade - quantia,
+      },
     });
 
     return this.serialize(card);

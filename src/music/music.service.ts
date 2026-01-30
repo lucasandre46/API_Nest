@@ -8,7 +8,7 @@ import { CreateMusicDto } from './DTO/create_music_dto';
 @Injectable()
 export class MusicService {
 
-  constructor( private prisma: PrismaService ) { }
+  constructor(private prisma: PrismaService) { }
 
   async create(createMusicDto: CreateMusicDto): Promise<music> {
     return this.prisma.$transaction(async (tx) => {
@@ -25,13 +25,13 @@ export class MusicService {
   async findOne(id: number): Promise<music> {
 
     const music = await this.prisma.music.findUnique({
-      
+
       where: { id },
 
     });
 
-    if(!music) {
-       throw new NotFoundException(`Musica com o ID #${id} não encontrado`);
+    if (!music) {
+      throw new NotFoundException(`Musica com o ID #${id} não encontrado`);
     }
 
     return music;
@@ -44,7 +44,7 @@ export class MusicService {
       if (!music) {
         throw new NotFoundException(`Musica com o ID #${id} não encontrado`);
       }
-    
+
       return tx.music.update({
         where: { id },
         data: createMusicDto,
@@ -53,11 +53,11 @@ export class MusicService {
 
   }
 
-  async remove( id: number): Promise<void> {
+  async remove(id: number): Promise<void> {
 
     await this.findOne(id);
 
-    await this.prisma.card.delete({
+    await this.prisma.music.delete({
       where: { id },
     });
 
@@ -65,42 +65,42 @@ export class MusicService {
 
 
 
-} 
+}
 
-  // pegaBD(): MusicBD[] {
-  //   return Music_Data;
+// pegaBD(): MusicBD[] {
+//   return Music_Data;
 
-  // }
+// }
 
-  // createMusic(dataCard: any) {
-  //   const newMusic = { id: Date.now(), ...dataCard }
-  //   Music_Data.push(newMusic);
-  //   return newMusic;
-  // }
+// createMusic(dataCard: any) {
+//   const newMusic = { id: Date.now(), ...dataCard }
+//   Music_Data.push(newMusic);
+//   return newMusic;
+// }
 
-  // deletaMusic(id: number) {
-  //   const index = Music_Data.findIndex((c) => c.id === id)
+// deletaMusic(id: number) {
+//   const index = Music_Data.findIndex((c) => c.id === id)
 
-  //   if (!index) {
-  //     throw new NotFoundException('Error: 404');
-  //   }
+//   if (!index) {
+//     throw new NotFoundException('Error: 404');
+//   }
 
-  //   const deleted = Music_Data.splice(index, 1);
-  //   return deleted[0]
-  // }
+//   const deleted = Music_Data.splice(index, 1);
+//   return deleted[0]
+// }
 
-  // atualizaMusic(id: number, bodydata: any) {
+// atualizaMusic(id: number, bodydata: any) {
 
-  //   const index = Music_Data.findIndex((c) => c.id === id);
+//   const index = Music_Data.findIndex((c) => c.id === id);
 
-  //   if (!index) {
-  //     throw new NotFoundException('Error: 404');
-  //   }
+//   if (!index) {
+//     throw new NotFoundException('Error: 404');
+//   }
 
-  //   Music_Data[index] = { ...Music_Data[index], ...bodydata }
+//   Music_Data[index] = { ...Music_Data[index], ...bodydata }
 
-  //   return Music_Data[index]
-  // }
+//   return Music_Data[index]
+// }
 
 //   pegaMusica(id: number) {
 //     const index = Music_Data.findIndex((c) => c.id === id);

@@ -27,10 +27,10 @@ model users {
 
 model music {
   id          Int @id @default(autoincrement())
-  time        String? @db.VarChar
   description String? @db.Text
-  album       Int?
   audio       String? @db.Text
+  title       String? @db.VarChar
+  imageUrl    String? @db.Text
 
   @@map("music")
 }

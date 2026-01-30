@@ -1,4 +1,4 @@
-import {IsNotEmpty, IsString, IsUrl } from 'class-validator'
+import { IsNotEmpty, IsString, IsUrl } from 'class-validator'
 
 export class CreateMusicDto {
   @IsString()
@@ -15,5 +15,5 @@ export class CreateMusicDto {
 
   @IsNotEmpty()
   @IsUrl()
-  audioUrl: string;
+  audio: string;
 }

@@ -20,12 +20,12 @@ export class MusicController {
     async proxyAudio(@Param('id', ParseIntPipe) id: number): Promise<StreamableFile> {
         try {
             // Obtém o ID do arquivo do serviço
-            const idAudio = this.musicService.findOne(id);
-            if (!idAudio) {
+            const music = await this.musicService.findOne(id);
+            if (!music || !music.audio) {
                 throw new NotFoundException('Áudio não encontrado no serviço');
             }
             // Monta a URL de download do Drive
-            const fileUrl = `https://drive.google.com/uc?export=download&id=${idAudio}`;
+            const fileUrl = `https://drive.google.com/uc?export=download&id=${music.audio}`;
             // Faz o fetch do arquivo
             const response = await fetch(fileUrl);
             if (!response.ok) {
