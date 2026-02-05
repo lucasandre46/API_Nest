@@ -21,7 +21,7 @@ export class MusicFService {
     }
 
     async create(createMusicFDto: CreateMusicFDto): Promise<MusicF> {
-        const docRef = await this.collection.add(createMusicFDto);
+        const docRef = await this.collection.add({ ...createMusicFDto });
         return {
             id: docRef.id,
             ...createMusicFDto
@@ -36,7 +36,7 @@ export class MusicFService {
         } as MusicF));
     }
 
-    async findOne(id: number | string): Promise<MusicF> {
+    async findOne(id: string): Promise<MusicF> {
         const doc = await this.collection.doc(String(id)).get();
 
         if (!doc.exists) {
@@ -49,23 +49,24 @@ export class MusicFService {
         } as MusicF;
     }
 
-    async update(id: number | string, createMusicFDto: CreateMusicFDto): Promise<MusicF> {
+    async update(id: string, createMusicFDto: CreateMusicFDto): Promise<MusicF> {
         const docRef = this.collection.doc(String(id));
-        const doc = await docRef.get();
 
-        if (!doc.exists) {
-            throw new NotFoundException(`Musica com o ID #${id} não encontrado`);
-        }
+        const dataToUpdate = {
+            title: createMusicFDto.title,
+            description: createMusicFDto.description,
+            imageUrl: createMusicFDto.imageUrl,
+            audio: createMusicFDto.audio,
+        };
 
-        await docRef.update({ ...createMusicFDto }); // Cast required if types are strict, but here spread works for plain object
+        await docRef.update(dataToUpdate);
 
         return {
             id: String(id),
-            ...createMusicFDto
+            ...dataToUpdate
         };
     }
-
-    async remove(id: number | string): Promise<void> {
+    async remove(id: string): Promise<void> {
         const docRef = this.collection.doc(String(id));
         const doc = await docRef.get();
 
